@@ -6,26 +6,21 @@ const cors = require('cors');
 const userRoute = require('./routes/userRoutes')
 dotenv.config()
 const PORT = process.env.PORT|| 8001;
+
+mongoose.set('strictQuery', true);
+mongoose.connect(process.env.MONGO_URI)
+.then(()=>{console.log("DB Connected")})
+.catch((err)=>{console.log("connection error",err)}) 
+
+
 app.use(cors());
 app.use(express.json());
-
-mongoose.set('strictQuery', false)
-const connect = async () => {
-    try {
-        await mongoose.connect(process.env.MONGO_URI)
-        console.log('Database Connected');
-    }
-    catch (err) {
-        console.log(err);
-
-        console.log('Database Connection failed');
-
-    }
-}
 app.use(express.urlencoded({extended:true}))
 
 app.use(userRoute)
-
+app.get('/',(req,res)=>{
+    res.send("moviesearch");
+})
 app.listen(PORT,()=>{
     console.log(`Sever connected at ${PORT}`);
     
