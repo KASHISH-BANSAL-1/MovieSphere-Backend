@@ -9,12 +9,19 @@ const PORT = process.env.PORT|| 8001;
 app.use(cors());
 app.use(express.json());
 
-mongoose.set('strictQuery', true);
-mongoose.connect('mongodb://127.0.0.1:27017/movie')
-  .then(() => console.log('Database Connected!'))
-  .catch((err)=>{console.log("Error while connection DB",err);
-  })
-  
+mongoose.set('strictQuery', false)
+const connect = async () => {
+    try {
+        await mongoose.connect(process.env.MONGO_URI)
+        console.log('Database Connected');
+    }
+    catch (err) {
+        console.log(err);
+
+        console.log('Database Connection failed');
+
+    }
+}
 app.use(express.urlencoded({extended:true}))
 
 app.use(userRoute)
